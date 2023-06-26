@@ -273,8 +273,8 @@ def get_throttling_function_name(js: str) -> str:
         #r'\([a-z]\s*=\s*([a-zA-Z0-9$]+)(\[\d+\])?\([a-z]\)',
 
         # starts from 2023 June
-        r'a\.[a-zA-Z]\s*&&\s*\([a-z]\s*=\s*a\.get\("n"\)\)\s*&&.*?\|\|\s*([a-z]+)',
-        r'\([a-z]\s*=\s*([a-zA-Z0-9$]+)(\[\d+\])?\([a-z]\)',
+        r'a\.[a-zA-Z]\s*&&\s*\([a-z]\s*=\s*a\.get\("n"\)\)\s*&&\s*'
+        r'\([a-z]\s*=\s*([a-zA-Z0-9$]{2,3})(\[\d+\])?\([a-z]\)'
     ]
     logger.debug('Finding throttling function name')
     for pattern in function_patterns:
@@ -286,6 +286,7 @@ def get_throttling_function_name(js: str) -> str:
                 return function_match.group(1)
             idx = function_match.group(2)
             if idx:
+                nfunc=re.escape(function_match.group(1))),
                 idx = idx.strip("[]")
                 array = re.search(
                     r'var {nfunc}\s*=\s*(\[.+?\]);'.format(
